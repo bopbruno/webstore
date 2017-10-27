@@ -52,4 +52,11 @@ public class ProductController {
 	productService.getProductById(productId));
 	return "product";
 	}
+	
+	//precisa implementar
+	@RequestMapping("/impl")
+	public String filterProducts() {
+		
+		return "product";
+	}
 }
