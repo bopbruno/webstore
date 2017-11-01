@@ -93,8 +93,31 @@ public class InMemoryProductRepository implements ProductRepository {
 				productsByCategory.addAll(this.getProductsByCategory(category));
 			}
 		}
+		
 		productsByCategory.retainAll(productsByBrand);
 		return productsByCategory;
+	}
+	
+	@Override
+	public Set<Product> getProductsByFilterPriceRage(Map<String, List<String>> filterParams) {
+		Set<Product> productsByPrice = new HashSet<Product>();		
+		Set<String> criterias = filterParams.keySet();
+
+		if (criterias.contains("low") && criterias.contains("high") ) {
+				productsByPrice.addAll(this.getProductsBypriceRage(new BigDecimal(filterParams.get("low").get(0)), new BigDecimal(filterParams.get("high").get(0))));
+		}
+		//productsByCategory.retainAll(productsByBrand);
+		return productsByPrice;
+	}
+	
+	private List<Product> getProductsBypriceRage(BigDecimal priceLow, BigDecimal priceHigh){
+		List<Product> productsByprice = new ArrayList<Product>();
+		for(Product product : listOfProducts){		
+			if( (priceLow.compareTo(product.getUnitPrice()) <= 0) && (priceHigh.compareTo(product.getUnitPrice()) >= 0) ){
+				productsByprice.add(product);
+			}
+		}
+		return productsByprice;
 	}
 
 	@Override
