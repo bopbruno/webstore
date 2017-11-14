@@ -131,4 +131,10 @@ public class InMemoryProductRepository implements ProductRepository {
 		}
 		return productsByManufacturer;
 	}
+
+	@Override
+	public void addProduct(Product product) {
+		// TODO Auto-generated method stub
+		listOfProducts.add(product);
+	}
 }
