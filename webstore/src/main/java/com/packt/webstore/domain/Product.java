@@ -1,10 +1,25 @@
 package com.packt.webstore.domain;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.web.multipart.MultipartFile;
 
-public class Product {
+
+
+
+
+@XmlRootElement
+public class Product implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6164497026574963109L;
 	private String productId;
 	private String name;
 	private BigDecimal unitPrice;
@@ -15,7 +30,9 @@ public class Product {
 	private long unitsInOrder;
 	private boolean discontinued;
 	private String condition;
+	@JsonIgnore
 	private MultipartFile productImage;
+	@JsonIgnore
 	private MultipartFile manualPDF;
 	
 	
@@ -140,7 +157,8 @@ public class Product {
 	public void setCondition(String condition) {
 		this.condition = condition;
 	}
-
+	
+	@XmlTransient
 	public MultipartFile getProductImage() {
 		return productImage;
 	}
@@ -149,6 +167,7 @@ public class Product {
 		this.productImage = productImage;
 	}
 
+	@XmlTransient
 	public MultipartFile getManualPDF() {
 		return manualPDF;
 	}
