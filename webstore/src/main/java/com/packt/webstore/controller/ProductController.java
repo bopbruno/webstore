@@ -1,18 +1,13 @@
 package com.packt.webstore.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +30,7 @@ import com.packt.webstore.domain.Product;
 import com.packt.webstore.exception.NoProductsFoundUnderCategoryException;
 import com.packt.webstore.exception.ProductNotFoundException;
 import com.packt.webstore.service.ProductService;
+import com.packt.webstore.validator.ProductValidator;
 
 @Controller
 @RequestMapping("/products")
@@ -42,6 +38,9 @@ public class ProductController {
 
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ProductValidator productValidator;
 
 	@RequestMapping
 	public String list(Model model) {
@@ -108,8 +107,13 @@ public class ProductController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String processAddNewProductForm(@ModelAttribute("newProduct") Product productToBeAdded, BindingResult result,
+	public String processAddNewProductForm(@ModelAttribute("newProduct") @Valid  Product productToBeAdded, BindingResult result,
 			HttpServletRequest request) {
+		
+		if(result.hasErrors()) {
+			  return "addProduct";
+			}
+		
 		String[] suppressedFields = result.getSuppressedFields();
 		if (suppressedFields.length > 0) {
 			throw new RuntimeException("Attempting to bind disallowed fields: "
@@ -149,6 +153,7 @@ public class ProductController {
 		binder.setAllowedFields("productId", "name", "unitPrice", "description", "manufacturer", "category",
 				"unitsInStock", "productImage", "manualPDF","language");
 		binder.setDisallowedFields("unitsInOrder", "discontinued");
+		binder.setValidator(productValidator);
 	}
 	
 	@ExceptionHandler(ProductNotFoundException.class)
@@ -159,5 +164,10 @@ public class ProductController {
 	  mav.addObject("url",req.getRequestURL()+"?"+req.getQueryString());
 	  mav.setViewName("productNotFound");
 	  return mav;
+	}
+	
+	@RequestMapping("/invalidPromoCode")
+	public String invalidPromoCode() {
+	  return "invalidPromoCode";
 	}
 }

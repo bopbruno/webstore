@@ -7,11 +7,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.packt.webstore.validator.Category;
+import com.packt.webstore.validator.ProductId;
 
-
-
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @XmlRootElement
 public class Product implements Serializable{
@@ -20,11 +26,23 @@ public class Product implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -6164497026574963109L;
+	
+	@Pattern(regexp="P[0-9]+", message="{Pattern.Product.productId.validation}")
+	@ProductId
 	private String productId;
+	
+	@Size(min=4, max=50, message="{Size.Product.name.validation}")
 	private String name;
+	
+	@Min(value=0, message="Min.Product.unitPrice.validation}")
+	@Digits(integer=8, fraction=2, message="{Digits.Product.unitPrice.validation}")
+	@NotNull(message= "{NotNull.Product.unitPrice.validation}")
 	private BigDecimal unitPrice;
-	private String description;
+	private String description;	
 	private String manufacturer;
+	
+	@Category
+	@NotEmpty(message= "{NotEmpty.Product.category.validation}")
 	private String category;
 	private long unitsInStock;
 	private long unitsInOrder;

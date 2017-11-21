@@ -25,6 +25,7 @@
 	</section>
 	<section class="container">
 		<form:form modelAttribute="newProduct" class="form-horizontal" enctype="multipart/form-data">
+			<form:errors path="*" cssClass="alert alert-danger" element="div"/>
 			<fieldset>
 				<legend>Add new product</legend>
 				<div class="form-group">
@@ -32,22 +33,31 @@
 						"addProduct.form.productId.label"/></label>
 					<div class="col-lg-10">
 						<form:input id="productId" path="productId" type="text" class="form:input-large" />
+						<form:errors path="productId" cssClass="text-danger"/>
 					</div>
 				</div>
 
 				<div class="form-group">
 					<label class="control-label col-lg-2" for="name">Name</label>
-					<div class="col-lg-10"><form:textarea id="name" path="name" rows = "2"/></div>
+					<div class="col-lg-10">
+						<form:textarea id="name" path="name" rows = "2"/>
+						<form:errors path="name" cssClass="text-danger"/>	
+					</div>
 				</div>				
 				
 				<div class="form-group">
 					<label class="control-label col-lg-2" for="description">Description</label>
-					<div class="col-lg-10"><form:textarea id="description" path="description" rows = "2"/></div>
+					<div class="col-lg-10">
+						<form:textarea id="description" path="description" rows = "2"/>							
+					</div>
 				</div>
 				
 				<div class="form-group">
 					<label class="control-label col-lg-2" for="unitPrice">Unit Price</label>
-					<div class="col-lg-10"><form:textarea id="unitPrice" path="unitPrice" rows = "2"/></div>
+					<div class="col-lg-10">
+						<form:textarea id="unitPrice" path="unitPrice" rows = "2"/>
+						<form:errors path="unitPrice" cssClass="text-danger"/>	
+					</div>
 				</div>
 				
 				<div class="form-group">
@@ -57,7 +67,10 @@
 				
 				<div class="form-group">
 					<label class="control-label col-lg-2" for="category">Category</label>
-					<div class="col-lg-10"><form:textarea id="category" path="category" rows = "2"/></div>
+					<div class="col-lg-10">
+						<form:textarea id="category" path="category" rows = "2"/>
+						<form:errors path="category" cssClass="text-danger"/>
+					</div>
 				</div>
 				
 				<div class="form-group">

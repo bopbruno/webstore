@@ -10,8 +10,7 @@ http://www.springframework.org/schema/context/spring-context-4.0.xsd
 http://www.springframework.org/schema/mvc
 http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
 
-<mvc:annotation-driven></mvc:annotation-driven>
-<mvc:annotation-driven enable-matrix-variables="true"/>
+<mvc:annotation-driven enable-matrix-variables="true" validator="validator"/>
 
 <context:component-scan base-package="com.packt.webstore"></context:component-scan>
 
@@ -61,12 +60,33 @@ class="org.springframework.context.support.ResourceBundleMessageSource">
   <bean class= "org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
   <property name="paramName" value="language"/>
   </bean>
-  <bean class= "com.packt.webstore.interceptor.AuditingInterceptor"/>  
+  <bean class= "com.packt.webstore.interceptor.AuditingInterceptor"/>
+  
+  <bean class="com.packt.webstore.interceptor.PromoCodeInterceptor">
+  <property name="promoCode" value="OFF3R"/>
+  <property name="errorRedirect" value="invalidPromoCode"/>
+  <property name="offerRedirect" value="products"/>
+  </bean>    
 </mvc:interceptors>
 
 <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
   <property name="defaultLocale" value="en"/>
 </bean>
 
+<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+  <property name="validationMessageSource" ref="messageSource"/>
+</bean>
+
+<bean id="productValidator" class="com.packt.webstore.validator.ProductValidator">
+  <property name = "springValidators">
+    <set>
+      <ref bean = "unitsInStockValidator"/>
+      <ref bean = "productImageValidator"/>
+    </set>
+  </property>
+</bean>
+
+<bean id="unitsInStockValidator" class="com.packt.webstore.validator.UnitsInStockValidator"/>
+<bean id="productImageValidator" class="com.packt.webstore.validator.ProductImageValidator"/>
 
 </beans>
