@@ -54,13 +54,14 @@ public class CartRestController {
 	@RequestMapping(value = "/add/{productId}", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void addItem(@PathVariable String productId, HttpServletRequest request) {
-
+		System.out.println("productId  "+productId);
 		String sessionId = request.getSession(true).getId();
 		Cart cart = cartService.read(sessionId);
+		System.out.println("cartService.read  "+cartService.read(sessionId));
 		if (cart == null) {
 			cart = cartService.create(new Cart(sessionId));
 		}
-
+		System.out.println("Cart "+cart.getCartId());
 		Product product = productService.getProductById(productId);
 		if (product == null) {
 			throw new IllegalArgumentException(new ProductNotFoundException(productId));
